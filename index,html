@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COOLIR — Engineered for Heat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0A0A0A;
+  --ice: #E8F0F2;
+  --cool: #1ABCCC;
+  --white: #FAFAFA;
+  --muted: #6B7F82;
+  --border: rgba(10,10,10,0.1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 10px; height: 10px;
+  background: var(--cool);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  border: 1px solid var(--cool);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.35s ease, opacity 0.2s;
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+}
+.cursor.hover { width: 16px; height: 16px; }
+.cursor-ring.hover { width: 52px; height: 52px; opacity: 0.2; }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  background: transparent;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled {
+  background: rgba(250,250,250,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.logo span { color: var(--cool); }
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--cool); }
+.nav-cta {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--ink);
+  padding: 12px 24px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--cool); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 160px 64px 80px;
+  position: relative;
+  z-index: 2;
+}
+.hero-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cool);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-tag::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--cool);
+}
+.hero-h1 {
+  font-size: clamp(56px, 6vw, 96px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  margin-bottom: 32px;
+}
+.hero-h1 em {
+  font-style: normal;
+  color: var(--cool);
+}
+.hero-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 360px;
+  margin-bottom: 48px;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.btn-primary {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--ink);
+  padding: 18px 36px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:hover { background: var(--cool); transform: translateY(-2px); }
+.btn-ghost {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s, gap 0.2s;
+}
+.btn-ghost:hover { color: var(--cool); gap: 14px; }
+.btn-ghost::after { content: '→'; }
+
+.hero-right {
+  position: relative;
+  overflow: hidden;
+  background: var(--ice);
+}
+.hero-visual {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.temp-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.temp-number {
+  font-size: clamp(120px, 16vw, 220px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: rgba(10,10,10,0.06);
+  user-select: none;
+}
+.temp-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--cool);
+  margin-top: -16px;
+}
+.hero-stat {
+  position: absolute;
+  bottom: 80px;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  gap: 2px;
+}
+.stat-item {
+  flex: 1;
+  background: var(--white);
+  padding: 20px 24px;
+}
+.stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.stat-num span { font-size: 14px; color: var(--cool); }
+.stat-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* MARQUEE */
+.marquee-wrap {
+  background: var(--ink);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative;
+}
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+.marquee-track span {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250,250,250,0.4);
+  padding: 0 32px;
+}
+.marquee-track span.hl { color: var(--cool); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* SCIENCE STRIP */
+.science {
+  padding: 120px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cool);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--cool);
+}
+.science-h2 {
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+.science-body {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 440px;
+}
+.science-body strong { color: var(--ink); font-weight: 400; }
+
+.mechanisms {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mech-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  background: var(--ice);
+  transition: background 0.2s;
+  cursor: default;
+}
+.mech-item:hover { background: #D4E8EC; }
+.mech-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--cool);
+  padding-top: 3px;
+  min-width: 24px;
+}
+.mech-text strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.mech-text p {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* PRODUCTS */
+.products {
+  padding: 120px 64px;
+}
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 64px;
+}
+.products-h2 {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+}
+.products-h2 em {
+  font-style: normal;
+  -webkit-text-stroke: 1.5px var(--ink);
+  color: transparent;
+}
+.view-all {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s, gap 0.2s;
+}
+.view-all:hover { color: var(--cool); gap: 14px; }
+.view-all::after { content: '→'; }
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 48px;
+}
+.tab-btn {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  background: var(--ice);
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s;
+  font-family: 'Syne', sans-serif;
+}
+.tab-btn.active, .tab-btn:hover { background: var(--ink); color: var(--white); }
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.product-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--ice);
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.product-card-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  opacity: 0.06;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  user-select: none;
+  transition: transform 0.5s ease, opacity 0.3s;
+}
+.product-card:hover .product-card-bg {
+  transform: scale(1.08);
+  opacity: 0.09;
+}
+.product-card-body {
+  position: relative;
+  z-index: 2;
+  padding: 24px;
+  background: linear-gradient(transparent, rgba(250,250,250,0.98) 40%);
+}
+.product-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cool);
+  margin-bottom: 6px;
+}
+.product-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.product-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.product-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.product-price {
+  font-size: 15px;
+  font-weight: 700;
+}
+.product-btn {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--ink);
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Syne', sans-serif;
+}
+.product-btn:hover { background: var(--cool); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* TECH SECTION */
+.tech {
+  padding: 120px 64px;
+  background: var(--ink);
+  color: var(--white);
+}
+.tech-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.tech-h2 {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+}
+.tech-h2 em { font-style: normal; color: var(--cool); }
+.tech-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: rgba(250,250,250,0.45);
+  max-width: 420px;
+  margin-bottom: 48px;
+}
+.tech-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.tech-feat {
+  padding: 20px 24px;
+  background: rgba(250,250,250,0.04);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  transition: background 0.2s;
+}
+.tech-feat:hover { background: rgba(26,188,204,0.1); }
+.feat-icon {
+  font-size: 16px;
+  min-width: 20px;
+  margin-top: 2px;
+}
+.feat-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--white);
+}
+.feat-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  color: rgba(250,250,250,0.4);
+}
+
+.tech-visual {
+  position: relative;
+}
+.temp-reduction {
+  background: rgba(250,250,250,0.04);
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.temp-reduction::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(26,188,204,0.12), transparent 70%);
+}
+.big-number {
+  font-size: 120px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--cool);
+  position: relative;
+}
+.big-unit {
+  font-size: 48px;
+  color: rgba(250,250,250,0.2);
+  vertical-align: super;
+  font-size: 56px;
+}
+.big-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250,250,250,0.35);
+  margin-top: 8px;
+  position: relative;
+}
+.yarn-stack {
+  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.yarn-layer {
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+.yarn-layer:nth-child(1) { background: rgba(26,188,204,0.25); color: var(--cool); }
+.yarn-layer:nth-child(2) { background: rgba(26,188,204,0.15); color: rgba(26,188,204,0.8); }
+.yarn-layer:nth-child(3) { background: rgba(26,188,204,0.08); color: rgba(250,250,250,0.6); }
+.yarn-layer:nth-child(4) { background: rgba(250,250,250,0.04); color: rgba(250,250,250,0.35); }
+.yarn-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: inherit;
+  opacity: 0.7;
+}
+
+/* KULIR BANNER */
+.kulir-banner {
+  padding: 80px 64px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+.kulir-word {
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  -webkit-text-stroke: 1.5px rgba(10,10,10,0.15);
+  color: transparent;
+  white-space: nowrap;
+}
+.kulir-meaning {
+  text-align: right;
+}
+.kulir-meaning h3 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.kulir-meaning p {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 340px;
+  margin-left: auto;
+}
+
+/* MANIFESTO */
+.manifesto {
+  padding: 140px 64px;
+  max-width: 900px;
+}
+.manifesto-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cool);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.manifesto-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--cool);
+}
+.manifesto h2 {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.manifesto h2 em { font-style: normal; color: var(--cool); }
+.manifesto p {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 680px;
+}
+.manifesto p + p { margin-top: 20px; }
+.manifesto p strong { color: var(--ink); font-weight: 400; }
+
+/* FOOTER */
+footer {
+  background: var(--ink);
+  color: var(--white);
+  padding: 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+}
+.footer-brand .logo { color: var(--white); margin-bottom: 12px; display: block; }
+.footer-brand p {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  color: rgba(250,250,250,0.35);
+  max-width: 240px;
+}
+.footer-col h4 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250,250,250,0.35);
+  margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul a {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: rgba(250,250,250,0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col ul a:hover { color: var(--cool); }
+.footer-bottom {
+  background: var(--ink);
+  border-top: 1px solid rgba(250,250,250,0.06);
+  padding: 20px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-bottom p {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(250,250,250,0.2);
+}
+
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* HERO ANIMATION */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-tag { animation: fadeUp 0.7s ease 0.2s both; }
+.hero-h1 { animation: fadeUp 0.7s ease 0.35s both; }
+.hero-sub { animation: fadeUp 0.7s ease 0.5s both; }
+.hero-actions { animation: fadeUp 0.7s ease 0.65s both; }
+.temp-display { animation: fadeUp 0.9s ease 0.4s both; }
+.hero-stat { animation: fadeUp 0.7s ease 0.7s both; }
+
+/* PULSE */
+@keyframes pulse {
+  0%, 100% { opacity: 0.06; }
+  50% { opacity: 0.12; }
+}
+.temp-number { animation: pulse 4s ease-in-out infinite; }
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 120px 24px 40px; }
+  .hero-right { min-height: 50vh; }
+  .science { grid-template-columns: 1fr; padding: 64px 24px; gap: 40px; }
+  .products { padding: 64px 24px; }
+  .product-grid { grid-template-columns: 1fr; }
+  .tech { padding: 64px 24px; }
+  .tech-grid { grid-template-columns: 1fr; gap: 40px; }
+  .kulir-banner { padding: 48px 24px; flex-direction: column; text-align: center; }
+  .kulir-meaning { text-align: center; }
+  .kulir-meaning p { margin: 0 auto; }
+  .manifesto { padding: 80px 24px; }
+  footer { grid-template-columns: 1fr; padding: 40px 24px; }
+  .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 8px; }
+  .products-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">COOL<span>IR</span></a>
+  <ul class="nav-links">
+    <li><a href="#performance">Performance</a></li>
+    <li><a href="#daily">Daily Wear</a></li>
+    <li><a href="#tech">Technology</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <a href="#products" class="nav-cta">Shop Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Kulir — Tamil for Cold</div>
+    <h1 class="hero-h1">Summer<br>has a<br><em>uniform</em><br>now.</h1>
+    <p class="hero-sub">
+      The first apparel brand engineered for tropical heat.<br>
+      Not to avoid it. To <strong>beat it.</strong>
+    </p>
+    <div class="hero-actions">
+      <a href="#products" class="btn-primary">Explore Collection</a>
+      <a href="#tech" class="btn-ghost">The Science</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="temp-display">
+        <div class="temp-number">-3°</div>
+        <div class="temp-label">// target core reduction</div>
+      </div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-item">
+        <div class="stat-num">3<span>°C</span></div>
+        <div class="stat-desc">Body temp reduction</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8<span>hr</span></div>
+        <div class="stat-desc">Sustained performance</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4<span>×</span></div>
+        <div class="stat-desc">Faster heat transfer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Phase Change Yarn</span><span class="hl">—</span>
+    <span>Conductive Copper Lining</span><span class="hl">—</span>
+    <span>Biomechanical Airflow</span><span class="hl">—</span>
+    <span>Janus Moisture Transport</span><span class="hl">—</span>
+    <span>Anti-Microbial Silver-Ion</span><span class="hl">—</span>
+    <span>Radiative Ankle Cuff</span><span class="hl">—</span>
+    <span>AVA Thermal Release</span><span class="hl">—</span>
+    <span>Sub-1 Denier Microfilament</span><span class="hl">—</span>
+    <span>Phase Change Yarn</span><span class="hl">—</span>
+    <span>Conductive Copper Lining</span><span class="hl">—</span>
+    <span>Biomechanical Airflow</span><span class="hl">—</span>
+    <span>Janus Moisture Transport</span><span class="hl">—</span>
+    <span>Anti-Microbial Silver-Ion</span><span class="hl">—</span>
+    <span>Radiative Ankle Cuff</span><span class="hl">—</span>
+    <span>AVA Thermal Release</span><span class="hl">—</span>
+    <span>Sub-1 Denier Microfilament</span><span class="hl">—</span>
+  </div>
+</div>
+
+<!-- SCIENCE -->
+<section class="science">
+  <div>
+    <div class="section-label reveal">Why existing gear fails</div>
+    <h2 class="science-h2 reveal reveal-delay-1">The heat<br>problem is<br>physics.</h2>
+    <p class="science-body reveal reveal-delay-2">
+      When ambient humidity exceeds 70%, <strong>sweat cannot evaporate</strong>. The body's primary cooling mechanism — the one every fabric brand builds around — completely stops working.<br><br>
+      Moisture-wicking fabrics move sweat. They do not remove heat. In Chennai, Erode, or Madurai in May, <strong>that distinction is everything</strong>.
+    </p>
+  </div>
+  <div class="mechanisms">
+    <div class="mech-item reveal">
+      <div class="mech-num">01</div>
+      <div class="mech-text">
+        <strong>Conductive heat removal</strong>
+        <p>Copper-infused microfilament draws heat directly off skin — the way cool metal feels. Not perception. Physics.</p>
+      </div>
+    </div>
+    <div class="mech-item reveal reveal-delay-1">
+      <div class="mech-num">02</div>
+      <div class="mech-text">
+        <strong>Phase change buffering</strong>
+        <p>PCM yarn absorbs heat at exactly 30°C — blocking temperature rise at the skin surface for up to 4 hours.</p>
+      </div>
+    </div>
+    <div class="mech-item reveal reveal-delay-2">
+      <div class="mech-num">03</div>
+      <div class="mech-text">
+        <strong>Biomechanical airflow</strong>
+        <p>Internal channels use your footstrike energy to pump stale humid air out. Ventilation powered by walking itself.</p>
+      </div>
+    </div>
+    <div class="mech-item reveal reveal-delay-3">
+      <div class="mech-num">04</div>
+      <div class="mech-text">
+        <strong>Vascular cooling</strong>
+        <p>Conductive cuff targets blood vessels at the ankle — cooling blood before it recirculates to your core.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="products-header">
+    <h2 class="products-h2 reveal">The<br><em>Collection</em></h2>
+    <a href="#" class="view-all reveal">View All Products</a>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('performance', this)">Performance Wear</button>
+    <button class="tab-btn" onclick="switchTab('daily', this)">Daily Wear</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-performance">
+    <div class="product-grid">
+      <div class="product-card reveal">
+        <div class="product-card-bg">T</div>
+        <div class="product-card-body">
+          <div class="product-tag">Performance Series</div>
+          <div class="product-name">CoolIR Tee Pro</div>
+          <div class="product-sub">Graphene inner layer · PCM zones<br>Anti-UV 860+ · Silver-ion antimicrobial</div>
+          <div class="product-action">
+            <div class="product-price">₹2,499</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-card-bg">U</div>
+        <div class="product-card-body">
+          <div class="product-tag">Performance Series</div>
+          <div class="product-name">CoolIR Brief Pro</div>
+          <div class="product-sub">SiPHONiX Janus wicking · PCM liner<br>4-way stretch · Odour control</div>
+          <div class="product-action">
+            <div class="product-price">₹1,299</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-card-bg">S</div>
+        <div class="product-card-body">
+          <div class="product-tag">Performance Series</div>
+          <div class="product-name">CoolIR Sock Pro</div>
+          <div class="product-sub">Biomechanical air channels · PCM toe<br>Conductive radiator cuff · Sub-1 denier</div>
+          <div class="product-action">
+            <div class="product-price">₹999</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-daily">
+    <div class="product-grid">
+      <div class="product-card reveal">
+        <div class="product-card-bg">T</div>
+        <div class="product-card-body">
+          <div class="product-tag">Daily Series</div>
+          <div class="product-name">CoolIR Tee</div>
+          <div class="product-sub">PCM yarn · Janus moisture layer<br>Soft touch · All-day comfort</div>
+          <div class="product-action">
+            <div class="product-price">₹1,799</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-card-bg">V</div>
+        <div class="product-card-body">
+          <div class="product-tag">Daily Series</div>
+          <div class="product-name">CoolIR Vest</div>
+          <div class="product-sub">Breathable mesh · IcSnow core<br>Slim fit · Odour-resistant</div>
+          <div class="product-action">
+            <div class="product-price">₹1,499</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-card-bg">U</div>
+        <div class="product-card-body">
+          <div class="product-tag">Daily Series</div>
+          <div class="product-name">CoolIR Brief</div>
+          <div class="product-sub">Moisture transport · Anti-chafe<br>Silver-ion treated · Office to outdoors</div>
+          <div class="product-action">
+            <div class="product-price">₹999</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-3">
+        <div class="product-card-bg">S</div>
+        <div class="product-card-body">
+          <div class="product-tag">Daily Series</div>
+          <div class="product-name">CoolIR Sock</div>
+          <div class="product-sub">Janus wicking · PCM toe zone<br>Conductive cuff · Slim profile</div>
+          <div class="product-action">
+            <div class="product-price">₹699</div>
+            <button class="product-btn">Pre-order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="tech" id="tech">
+  <div class="tech-grid">
+    <div>
+      <div class="section-label" style="color:rgba(26,188,204,0.7)">
+        <span style="display:inline-block;width:24px;height:1px;background:rgba(26,188,204,0.7);margin-right:10px;"></span>
+        Material Stack
+      </div>
+      <h2 class="tech-h2 reveal">Built from<br>the <em>yarn</em><br>up.</h2>
+      <p class="tech-sub reveal reveal-delay-1">
+        Every fibre has a job. Yarns sourced from specialist functional manufacturers — the same technology supply chain used in aerospace and military cooling systems, now in a sock.
+      </p>
+      <div class="tech-features">
+        <div class="tech-feat reveal">
+          <div class="feat-icon">❄</div>
+          <div>
+            <div class="feat-name">3°C Core Temperature Reduction</div>
+            <div class="feat-desc">Primary engineering target. Validated via Time to Thermal Saturation protocol at 90% RH, 40°C ambient.</div>
+          </div>
+        </div>
+        <div class="tech-feat reveal reveal-delay-1">
+          <div class="feat-icon">⚡</div>
+          <div>
+            <div class="feat-name">4× Faster Heat Transfer</div>
+            <div class="feat-desc">Sub-1 denier copper-infused microfilament multiplies skin contact surface area, conducting heat away faster than standard synthetics.</div>
+          </div>
+        </div>
+        <div class="tech-feat reveal reveal-delay-2">
+          <div class="feat-icon">◎</div>
+          <div>
+            <div class="feat-name">One-Way Moisture Transport</div>
+            <div class="feat-desc">SiPHONiX® Janus bilayer pushes sweat outward, never inward. Skin stays dry regardless of sweat rate.</div>
+          </div>
+        </div>
+        <div class="tech-feat reveal reveal-delay-3">
+          <div class="feat-icon">◈</div>
+          <div>
+            <div class="feat-name">Silver-Ion Antimicrobial</div>
+            <div class="feat-desc">Yarn-integrated, not surface-coated. Maintains performance across 100+ washes. Eliminates odour at source.</div>
+          </div>
+        </div>
+        <div class="tech-feat reveal reveal-delay-4">
+          <div class="feat-icon">▲</div>
+          <div>
+            <div class="feat-name">Anti-UV 860+</div>
+            <div class="feat-desc">Blocks over 98% of UV radiation. Reduces solar heat load absorbed through fabric. Works with the material, not against it.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tech-visual">
+      <div class="temp-reduction reveal">
+        <div class="big-number">3<span class="big-unit">°</span></div>
+        <div class="big-label">// target body temperature reduction</div>
+      </div>
+      <div class="yarn-stack">
+        <div class="yarn-layer">
+          <span>Skin Layer — Copper Microfilament</span>
+          <span class="yarn-label">sub-1 denier</span>
+        </div>
+        <div class="yarn-layer">
+          <span>Core — PCM + SiPHONiX® Janus</span>
+          <span class="yarn-label">28–32°C melt point</span>
+        </div>
+        <div class="yarn-layer">
+          <span>Structure — Graphene Composite</span>
+          <span class="yarn-label">heat redistribution</span>
+        </div>
+        <div class="yarn-layer">
+          <span>Outer — Bamboo Viscose</span>
+          <span class="yarn-label">hydrophilic exhaust</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KULIR BANNER -->
+<div class="kulir-banner reveal">
+  <div class="kulir-word">குளிர்</div>
+  <div class="kulir-word" style="-webkit-text-stroke-color: rgba(10,10,10,0.08);">KULIR</div>
+  <div class="kulir-meaning">
+    <h3>குளிர் — Kulir</h3>
+    <p>Tamil for cold, cool, refreshing. The word at the root of everything we build. A reminder that this brand exists for one climate, one problem, and one people.</p>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="about">
+  <div class="manifesto-label">Manifesto</div>
+  <h2 class="reveal">Winter has a uniform.<br><em>So should summer.</em></h2>
+  <p class="reveal reveal-delay-1">
+    Walk into any shop in India today and you will find thermal wear for winter — Uniqlo Heattech, woollen socks, fleece jackets. An entire industry exists to help people fight the cold. <strong>Summer has avoidance.</strong> Stay indoors. Wear loose clothes. Use the AC.
+  </p>
+  <p class="reveal reveal-delay-2">
+    COOLIR is building the summer equivalent. Not products that manage your discomfort. Products that actively remove heat from your body using the same principles as aerospace thermal management — phase change materials, conductive yarn physics, biomechanical ventilation — made wearable, made affordable, made for India.
+  </p>
+  <p class="reveal reveal-delay-3">
+    <strong>Every product we make has one primary engineering target: 3°C body temperature reduction.</strong> Everything else — the breathability, the odour control, the UV protection — follows from that commitment. We are not a fashion brand that does performance. We are an engineering company that makes clothes.
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <a href="#" class="logo">COOL<span style="color:var(--cool)">IR</span></a>
+    <p>Summer wear engineered for tropical heat. Built on science. Made in India.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Products</h4>
+    <ul>
+      <li><a href="#">Performance Tee</a></li>
+      <li><a href="#">Performance Sock</a></li>
+      <li><a href="#">Performance Brief</a></li>
+      <li><a href="#">Daily Tee</a></li>
+      <li><a href="#">Daily Vest</a></li>
+      <li><a href="#">Daily Sock</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Science</h4>
+    <ul>
+      <li><a href="#">The Technology</a></li>
+      <li><a href="#">Material Stack</a></li>
+      <li><a href="#">Test Protocols</a></li>
+      <li><a href="#">About Coolir</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 COOLIR. All rights reserved. Kulir — குளிர் — Cold.</p>
+  <p>Engineered for India's heat. Built for the world.</p>
+</div>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .mech-item, .tech-feat, .product-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Tabs
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+
+  // Re-trigger reveal animations in new tab
+  document.querySelectorAll('#tab-' + name + ' .reveal').forEach(el => {
+    el.classList.remove('visible');
+    setTimeout(() => el.classList.add('visible'), 50);
+  });
+}
+
+// Pre-populate daily tab reveals on load
+setTimeout(() => {
+  document.querySelectorAll('#tab-daily .reveal').forEach(el => {
+    observer.observe(el);
+  });
+}, 100);
+</script>
+</body>
+</html>
